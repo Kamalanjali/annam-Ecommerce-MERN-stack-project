@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Eye, EyeOff, User, Mail, Lock, Loader2 } from 'lucide-react';
+import { X, Eye, EyeOff, User, Mail, Lock, Loader2, Phone, MapPin, Building } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 interface AuthModalProps {
@@ -19,6 +19,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
+    phone: '',
+    address: '',
+    city: '',
+    pincode: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -49,7 +53,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           return;
         }
         
-        const { error } = await signUp(formData.email, formData.password, formData.fullName);
+        const { error } = await signUp(
+          formData.email, 
+          formData.password, 
+          formData.fullName,
+          formData.phone,
+          formData.address,
+          formData.city,
+          formData.pincode
+        );
         if (error) {
           setError(error.message);
         } else {
@@ -75,6 +87,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setError('');
     setFormData({
       fullName: '',
+      phone: '',
+      address: '',
+      city: '',
+      pincode: '',
       email: '',
       password: '',
       confirmPassword: ''
@@ -124,6 +140,88 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       required
                       className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
                       placeholder="Enter your full name"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {mode === 'signup' && (
+                <div>
+                  <label htmlFor="address" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Address
+                  </label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <textarea
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      required
+                      rows={3}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200 resize-none"
+                      placeholder="Enter your full address"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {mode === 'signup' && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="city" className="block text-sm font-semibold text-gray-700 mb-2">
+                      City
+                    </label>
+                    <div className="relative">
+                      <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                      <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
+                        placeholder="City"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="pincode" className="block text-sm font-semibold text-gray-700 mb-2">
+                      Pincode
+                    </label>
+                    <input
+                      type="text"
+                      id="pincode"
+                      name="pincode"
+                      value={formData.pincode}
+                      onChange={handleInputChange}
+                      required
+                      pattern="[0-9]{6}"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
+                      placeholder="Pincode"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {mode === 'signup' && (
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
+                      placeholder="Enter your phone number"
                     />
                   </div>
                 </div>
