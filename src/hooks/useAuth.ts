@@ -24,8 +24,6 @@ export const useAuth = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
-  }
   const signUp = async (
     email: string, 
     password: string, 
