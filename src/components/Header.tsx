@@ -1,6 +1,9 @@
 import React from 'react';
-import { ShoppingCart, Leaf, Search, Menu, X } from 'lucide-react';
+import { ShoppingCart, Leaf, Search, Menu, X, LogIn } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { UserMenu } from './UserMenu';
+import { AuthModal } from './AuthModal';
 
 interface HeaderProps {
   cartItemsCount: number;
@@ -11,14 +14,22 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onSearch }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const { user } = useAuth();
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch(searchQuery);
   };
 
+  const openAuthModal = (mode: 'login' | 'signup') => {
+    setAuthMode(mode);
+    setIsAuthModalOpen(true);
+  };
   return (
-    <header className="bg-white shadow-sm border-b border-green-100 sticky top-0 z-50">
+    <>
+      <header className="bg-white shadow-sm border-b border-green-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -54,6 +65,27 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
 
           {/* Cart and Mobile Menu */}
           <div className="flex items-center space-x-4">
+            {/* Auth Buttons / User Menu */}
+            {user ? (
+              <UserMenu />
+            ) : (
+              <div className="hidden sm:flex items-center space-x-2">
+                <button
+                  onClick={() => openAuthModal('login')}
+                  className="text-gray-600 hover:text-green-600 transition-colors duration-200 flex items-center space-x-1"
+                >
+                  <LogIn className="h-4 w-4" />
+                  <span>Sign In</span>
+                </button>
+                <button
+                  onClick={() => openAuthModal('signup')}
+                  className="bg-green-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-green-700 transition-all duration-200"
+                >
+                  Sign Up
+                </button>
+              </div>
+            )}
+
             <button
               onClick={onCartClick}
               className="relative p-2 text-gray-600 hover:text-green-600 transition-colors duration-200"
@@ -85,6 +117,24 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
               <a href="#about" className="text-gray-600 hover:text-green-600 transition-colors duration-200">About</a>
               <a href="#contact" className="text-gray-600 hover:text-green-600 transition-colors duration-200">Contact</a>
               
+              {/* Mobile Auth Buttons */}
+              {!user && (
+                <div className="pt-4 border-t border-gray-100 space-y-2">
+                  <button
+                    onClick={() => openAuthModal('login')}
+                    className="w-full text-left text-gray-600 hover:text-green-600 transition-colors duration-200"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => openAuthModal('signup')}
+                    className="w-full bg-green-600 text-white py-2 rounded-full font-semibold hover:bg-green-700 transition-all duration-200"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
+
               {/* Mobile Search */}
               <form onSubmit={handleSearchSubmit} className="pt-4 border-t border-gray-100">
                 <div className="relative">
@@ -102,6 +152,13 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
           </div>
         )}
       </div>
-    </header>
+      </header>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode={authMode}
+      />
+    </>
   );
 };
