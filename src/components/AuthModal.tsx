@@ -107,7 +107,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       
       {/* Modal */}
       <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md transform transition-all duration-300 animate-fadeInUp">
+        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto transform transition-all duration-300 animate-fadeInUp">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-100">
             <h2 className="text-2xl font-bold text-gray-900">
@@ -320,7 +320,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </form>
 
             {/* Switch Mode */}
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center pb-2">
               <p className="text-gray-600">
                 {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}
                 <button

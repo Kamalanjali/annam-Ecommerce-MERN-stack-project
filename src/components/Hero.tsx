@@ -43,10 +43,6 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
                 <span>Explore Products</span>
                 <ArrowRight className="h-5 w-5" />
               </button>
-              
-              <button className="border-2 border-green-600 text-green-600 px-8 py-4 rounded-full font-semibold hover:bg-green-50 transition-all duration-200">
-                Learn Our Story
-              </button>
             </div>
 
             {/* Features */}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { CartItem } from '../types';
+import { PaymentModal } from './PaymentModal';
 
 interface CartProps {
   isOpen: boolean;
@@ -19,10 +20,19 @@ export const Cart: React.FC<CartProps> = ({
   onRemoveItem,
   totalPrice
 }) => {
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = React.useState(false);
+
+  const handlePaymentSuccess = () => {
+    // Clear cart and show success message
+    alert('Payment successful! Your order has been placed.');
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <>
+      <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Overlay */}
       <div 
         className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
@@ -125,8 +135,11 @@ export const Cart: React.FC<CartProps> = ({
               </div>
               
               <div className="space-y-3">
-                <button className="w-full bg-green-600 text-white py-4 rounded-xl font-semibold hover:bg-green-700 transition-all duration-200 transform hover:scale-105 active:scale-95">
-                  Proceed to Checkout
+                <button 
+                  onClick={() => setIsPaymentModalOpen(true)}
+                  className="w-full bg-green-600 text-white py-4 rounded-xl font-semibold hover:bg-green-700 transition-all duration-200 transform hover:scale-105 active:scale-95"
+                >
+                  Proceed to Payment
                 </button>
                 
                 <button 
@@ -140,6 +153,14 @@ export const Cart: React.FC<CartProps> = ({
           )}
         </div>
       </div>
-    </div>
+      </div>
+
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        totalAmount={totalPrice}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
+    </>
   );
 };
