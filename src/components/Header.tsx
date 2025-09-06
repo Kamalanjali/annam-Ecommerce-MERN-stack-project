@@ -23,8 +23,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
     onSearch(searchQuery);
   };
 
-  const openAuthModal = (mode: 'login' | 'signup') => {
-    setAuthMode(mode);
+  const openAuthModal = (mode: 'signin') => {
     setIsAuthModalOpen(true);
   };
   return (
@@ -69,19 +68,13 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
             {user ? (
               <UserMenu />
             ) : (
-              <div className="hidden sm:flex items-center space-x-2">
+              <div className="hidden sm:flex items-center">
                 <button
-                  onClick={() => openAuthModal('login')}
-                  className="text-gray-600 hover:text-green-600 transition-colors duration-200 flex items-center space-x-1"
+                  onClick={() => openAuthModal('signin')}
+                  className="bg-green-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-green-700 transition-all duration-200 flex items-center space-x-1"
                 >
                   <LogIn className="h-4 w-4" />
                   <span>Sign In</span>
-                </button>
-                <button
-                  onClick={() => openAuthModal('signup')}
-                  className="bg-green-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-green-700 transition-all duration-200"
-                >
-                  Sign Up
                 </button>
               </div>
             )}
@@ -119,18 +112,12 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
               
               {/* Mobile Auth Buttons */}
               {!user && (
-                <div className="pt-4 border-t border-gray-100 space-y-2">
+                <div className="pt-4 border-t border-gray-100">
                   <button
-                    onClick={() => openAuthModal('login')}
-                    className="w-full text-left text-gray-600 hover:text-green-600 transition-colors duration-200"
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => openAuthModal('signup')}
+                    onClick={() => openAuthModal('signin')}
                     className="w-full bg-green-600 text-white py-2 rounded-full font-semibold hover:bg-green-700 transition-all duration-200"
                   >
-                    Sign Up
+                    Sign In
                   </button>
                 </div>
               )}
@@ -157,7 +144,6 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
-        initialMode={authMode}
       />
     </>
   );

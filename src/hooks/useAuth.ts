@@ -49,14 +49,29 @@ export const useAuth = () => {
     return { data, error };
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (identifier: string, password: string) => {
+    // Check if identifier is email or phone
+    const isEmail = identifier.includes('@');
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
+      email: isEmail ? identifier : '', // For now, we'll use email. Phone auth needs additional setup
       password,
     });
     return { data, error };
   };
 
+  const signInWithGoogle = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+    return { data, error };
+  };
+
+  const signInWithFacebook = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+    });
+    return { data, error };
+  };
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     return { error };
@@ -67,6 +82,8 @@ export const useAuth = () => {
     loading,
     signUp,
     signIn,
+    signInWithGoogle,
+    signInWithFacebook,
     signOut,
   };
 };

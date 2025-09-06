@@ -1,34 +1,27 @@
 import React, { useState } from 'react';
-import { X, Eye, EyeOff, User, Mail, Lock, Loader2, Phone, MapPin, Building } from 'lucide-react';
+import { X, Eye, EyeOff, Mail, Lock, Loader2, Phone, Chrome } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialMode?: 'login' | 'signup';
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ 
   isOpen, 
-  onClose, 
-  initialMode = 'login' 
+  onClose
 }) => {
-  const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
+  const [signInMethod, setSignInMethod] = useState<'email' | 'phone'>('email');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    fullName: '',
-    phone: '',
-    address: '',
-    city: '',
-    pincode: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    phone: '',
+    password: ''
   });
 
-  const { signIn, signUp } = useAuth();
+  const { signIn, signInWithGoogle, signInWithFacebook } = useAuth();
 
   if (!isOpen) return null;
 
@@ -46,34 +39,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setError('');
 
     try {
-      if (mode === 'signup') {
-        if (formData.password !== formData.confirmPassword) {
-          setError('Passwords do not match');
-          setLoading(false);
-          return;
-        }
-        
-        const { error } = await signUp(
-          formData.email, 
-          formData.password, 
-          formData.fullName,
-          formData.phone,
-          formData.address,
-          formData.city,
-          formData.pincode
-        );
-        if (error) {
-          setError(error.message);
-        } else {
-          onClose();
-        }
+      const identifier = signInMethod === 'email' ? formData.email : formData.phone;
+      const { error } = await signIn(identifier, formData.password);
+      if (error) {
+        setError(error.message);
       } else {
-        const { error } = await signIn(formData.email, formData.password);
-        if (error) {
-          setError(error.message);
-        } else {
-          onClose();
-        }
+        onClose();
       }
     } catch (err) {
       setError('An unexpected error occurred');
@@ -82,19 +53,36 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const switchMode = () => {
-    setMode(mode === 'login' ? 'signup' : 'login');
-    setError('');
-    setFormData({
-      fullName: '',
-      phone: '',
-      address: '',
-      city: '',
-      pincode: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    });
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      const { error } = await signInWithGoogle();
+      if (error) {
+        setError(error.message);
+      } else {
+        onClose();
+      }
+    } catch (err) {
+      setError('Google sign-in failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    setLoading(true);
+    try {
+      const { error } = await signInWithFacebook();
+      if (error) {
+        setError(error.message);
+      } else {
+        onClose();
+      }
+    } catch (err) {
+      setError('Facebook sign-in failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -107,108 +95,67 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       
       {/* Modal */}
       <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto transform transition-all duration-300 animate-fadeInUp">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto transform transition-all duration-300 animate-fadeInUp">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-900">
-              {mode === 'login' ? 'Welcome Back' : 'Create Account'}
-            </h2>
+          <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Sign In</h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-200"
             >
-              <X className="h-6 w-6 text-gray-600" />
+              <X className="h-6 w-6 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
 
           {/* Form */}
           <div className="p-6">
+            {/* Sign-in Method Toggle */}
+            <div className="flex bg-gray-100 dark:bg-gray-700 rounded-xl p-1 mb-6">
+              <button
+                onClick={() => setSignInMethod('email')}
+                className={`flex-1 py-2 px-4 rounded-lg font-semibold transition-all duration-200 ${
+                  signInMethod === 'email'
+                    ? 'bg-white dark:bg-gray-600 text-green-600 dark:text-green-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300'
+                }`}
+              >
+                Email
+              </button>
+              <button
+                onClick={() => setSignInMethod('phone')}
+                className={`flex-1 py-2 px-4 rounded-lg font-semibold transition-all duration-200 ${
+                  signInMethod === 'phone'
+                    ? 'bg-white dark:bg-gray-600 text-green-600 dark:text-green-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300'
+                }`}
+              >
+                Phone
+              </button>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-6">
-              {mode === 'signup' && (
+              {signInMethod === 'email' ? (
                 <div>
-                  <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Full Name
+                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Email Address
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <input
-                      type="text"
-                      id="fullName"
-                      name="fullName"
-                      value={formData.fullName}
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
-                      placeholder="Enter your full name"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
+                      placeholder="Enter your email"
                     />
                   </div>
                 </div>
-              )}
-
-              {mode === 'signup' && (
+              ) : (
                 <div>
-                  <label htmlFor="address" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Address
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <textarea
-                      id="address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      required
-                      rows={3}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200 resize-none"
-                      placeholder="Enter your full address"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {mode === 'signup' && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="city" className="block text-sm font-semibold text-gray-700 mb-2">
-                      City
-                    </label>
-                    <div className="relative">
-                      <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                      <input
-                        type="text"
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
-                        placeholder="City"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="pincode" className="block text-sm font-semibold text-gray-700 mb-2">
-                      Pincode
-                    </label>
-                    <input
-                      type="text"
-                      id="pincode"
-                      name="pincode"
-                      value={formData.pincode}
-                      onChange={handleInputChange}
-                      required
-                      pattern="[0-9]{6}"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
-                      placeholder="Pincode"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {mode === 'signup' && (
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Phone Number
                   </label>
                   <div className="relative">
@@ -220,7 +167,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
                       placeholder="Enter your phone number"
                     />
                   </div>
@@ -228,26 +175,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               )}
 
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
-                    placeholder="Enter your email"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -259,13 +187,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={formData.password}
                     onChange={handleInputChange}
                     required
-                    className="w-full pl-10 pr-12 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full transition-colors duration-200"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5 text-gray-400" />
@@ -276,29 +204,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </div>
               </div>
 
-              {mode === 'signup' && (
-                <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Confirm Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <input
-                      type="password"
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-green-400 transition-colors duration-200"
-                      placeholder="Confirm your password"
-                    />
-                  </div>
-                </div>
-              )}
-
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl text-sm">
                   {error}
                 </div>
               )}
@@ -311,25 +218,42 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 {loading ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    <span>{mode === 'login' ? 'Signing In...' : 'Creating Account...'}</span>
+                    <span>Signing In...</span>
                   </>
                 ) : (
-                  <span>{mode === 'login' ? 'Sign In' : 'Create Account'}</span>
+                  <span>Sign In</span>
                 )}
               </button>
             </form>
 
-            {/* Switch Mode */}
-            <div className="mt-6 text-center pb-2">
-              <p className="text-gray-600">
-                {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}
-                <button
-                  onClick={switchMode}
-                  className="ml-2 text-green-600 font-semibold hover:text-green-700 transition-colors duration-200"
-                >
-                  {mode === 'login' ? 'Sign Up' : 'Sign In'}
-                </button>
-              </p>
+            {/* Divider */}
+            <div className="flex items-center my-6">
+              <div className="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
+              <span className="px-4 text-sm text-gray-500 dark:text-gray-400">or</span>
+              <div className="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
+            </div>
+
+            {/* Social Sign-in */}
+            <div className="space-y-3">
+              <button
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+                className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 disabled:opacity-50"
+              >
+                <Chrome className="h-5 w-5 text-red-500" />
+                <span className="font-semibold text-gray-700 dark:text-gray-300">Continue with Google</span>
+              </button>
+
+              <button
+                onClick={handleFacebookSignIn}
+                disabled={loading}
+                className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 disabled:opacity-50"
+              >
+                <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">f</span>
+                </div>
+                <span className="font-semibold text-gray-700 dark:text-gray-300">Continue with Facebook</span>
+              </button>
             </div>
           </div>
         </div>

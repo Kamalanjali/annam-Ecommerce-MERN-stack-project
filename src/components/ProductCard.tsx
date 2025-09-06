@@ -10,8 +10,11 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+    if (isHovered) return; // Pause animation when hovered
+    
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => 
         (prevIndex + 1) % product.images.length
@@ -19,15 +22,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, 
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [product.images.length]);
+  }, [product.images.length, isHovered]);
 
   return (
     <div 
-      className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group overflow-hidden transform hover:-translate-y-2 cursor-pointer"
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group overflow-hidden transform hover:-translate-y-2 cursor-pointer"
       onClick={() => onClick(product)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product Image Carousel */}
-      <div className="relative overflow-hidden h-64">
+      <div className="relative overflow-hidden h-64 rounded-t-2xl">
         <div 
           className="flex transition-transform duration-500 ease-in-out h-full"
           style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
@@ -37,7 +42,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, 
               key={index}
               src={image}
               alt={`${product.name} ${index + 1}`}
-              className="w-full h-full object-cover flex-shrink-0 group-hover:scale-110 transition-transform duration-500"
+              className={`w-full h-full object-cover flex-shrink-0 transition-transform duration-500 ${isHovered ? 'scale-110 brightness-110' : 'group-hover:scale-110'}`}
             />
           ))}
         </div>
@@ -71,15 +76,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, 
       {/* Product Info */}
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-bold text-gray-900 text-lg group-hover:text-green-600 transition-colors duration-200">
+          <h3 className="font-bold text-gray-900 dark:text-white text-lg group-hover:text-green-600 transition-colors duration-200">
             {product.name}
           </h3>
-          <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+          <span className="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
             {product.weight}
           </span>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
           {product.description}
         </p>
 
@@ -93,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, 
               />
             ))}
           </div>
-          <span className="text-sm text-gray-500">({product.reviewCount})</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">({product.reviewCount})</span>
         </div>
 
         {/* Ingredients Preview */}
@@ -101,7 +106,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, 
           <p className="text-xs text-gray-500 mb-1">Main ingredients:</p>
           <div className="flex flex-wrap gap-1">
             {product.ingredients.slice(0, 3).map((ingredient, index) => (
-              <span key={index} className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+              <span key={index} className="text-xs bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 px-2 py-1 rounded-full">
                 {ingredient}
               </span>
             ))}
@@ -114,9 +119,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, 
         {/* Price and Add to Cart */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-gray-900">₹{product.price}</span>
+            <span className="text-2xl font-bold text-gray-900 dark:text-white">₹{product.price}</span>
             {product.originalPrice && (
-              <span className="text-sm text-gray-500 line-through">₹{product.originalPrice}</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400 line-through">₹{product.originalPrice}</span>
             )}
           </div>
           

@@ -8,11 +8,13 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { useCart } from './hooks/useCart';
 import { useAuth } from './hooks/useAuth';
+import { useDarkMode } from './hooks/useDarkMode';
 import { products } from './data/products';
 import { ProductCategory } from './types';
 
 function App() {
   const { loading } = useAuth();
+  useDarkMode(); // Initialize dark mode
   const {
     cartItems,
     isCartOpen,

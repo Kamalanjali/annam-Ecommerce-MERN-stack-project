@@ -188,20 +188,23 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                   </button>
                 </div>
               </div>
-            </div>
+        onClick={onClose}
           </div>
         </div>
       </div>
 
-      {/* Full Screen Image Modal */}
+        <div 
+          className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 animate-fadeInUp"
+          onClick={(e) => e.stopPropagation()}
+        >
       {showFullImage && (
-        <div className="fixed inset-0 z-60 bg-black bg-opacity-90 flex items-center justify-center p-4">
-          <div className="relative max-w-4xl max-h-full">
+          <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{product.name}</h2>
             <button
               onClick={() => setShowFullImage(false)}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors duration-200 z-10"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-200"
             >
-              <X className="h-8 w-8" />
+              <X className="h-6 w-6 text-gray-600 dark:text-gray-400" />
             </button>
             <img
               src={product.images[selectedImageIndex]}
