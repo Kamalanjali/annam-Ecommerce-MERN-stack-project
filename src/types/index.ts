@@ -5,7 +5,7 @@ export interface Product {
   price: number;
   originalPrice?: number;
   category: ProductCategory;
-  image: string;
+  images: string[];
   ingredients: string[];
   weight: string;
   inStock: boolean;
@@ -34,9 +34,8 @@ export interface Address {
 }
 
 export type ProductCategory = 
-  | 'podis' 
-  | 'karams' 
+  | 'podis-karams'
   | 'pickles' 
-  | 'fryums' 
-  | 'vadiyalu' 
+  | 'fryums-vadiyalu'
   | 'milk-products';
+  detailedDescription: string;

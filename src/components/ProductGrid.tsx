@@ -2,6 +2,7 @@ import React from 'react';
 import { Product, ProductCategory } from '../types';
 import { ProductCard } from './ProductCard';
 import { CategoryFilter } from './CategoryFilter';
+import { ProductModal } from './ProductModal';
 
 interface ProductGridProps {
   products: Product[];
@@ -18,6 +19,25 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   onAddToCart,
   searchQuery
 }) => {
+  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const handleAddToCartFromModal = (product: Product, quantity: number = 1) => {
+    for (let i = 0; i < quantity; i++) {
+      onAddToCart(product);
+    }
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     const matchesSearch = searchQuery === '' || 
@@ -31,7 +51,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   });
 
   return (
-    <section id="products" className="bg-gray-50 py-20">
+    <>
+      <section id="products" className="bg-gray-50 py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h2>
@@ -69,12 +90,21 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                 <ProductCard
                   product={product}
                   onAddToCart={onAddToCart}
+                  onClick={handleProductClick}
                 />
               </div>
             ))}
           </div>
         )}
       </div>
-    </section>
+      </section>
+
+      <ProductModal
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onAddToCart={handleAddToCartFromModal}
+      />
+    </>
   );
 };

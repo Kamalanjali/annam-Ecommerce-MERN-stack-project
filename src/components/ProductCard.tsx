@@ -1,22 +1,58 @@
-import React from 'react';
-import { Plus, Star, Leaf } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Star, Leaf } from 'lucide-react';
 import { Product } from '../types';
 
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
+  onClick: (product: Product) => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onClick }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        (prevIndex + 1) % product.images.length
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [product.images.length]);
+
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group overflow-hidden transform hover:-translate-y-2">
-      {/* Product Image */}
-      <div className="relative overflow-hidden">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-        />
+    <div 
+      className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group overflow-hidden transform hover:-translate-y-2 cursor-pointer"
+      onClick={() => onClick(product)}
+    >
+      {/* Product Image Carousel */}
+      <div className="relative overflow-hidden h-64">
+        <div 
+          className="flex transition-transform duration-500 ease-in-out h-full"
+          style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+        >
+          {product.images.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={`${product.name} ${index + 1}`}
+              className="w-full h-full object-cover flex-shrink-0 group-hover:scale-110 transition-transform duration-500"
+            />
+          ))}
+        </div>
+        
+        {/* Image Indicators */}
+        <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {product.images.map((_, index) => (
+            <div
+              key={index}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
         
         {/* Discount Badge */}
         {product.originalPrice && (
@@ -30,14 +66,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
           <Leaf className="h-3 w-3" />
           <span>Organic</span>
         </div>
-
-        {/* Quick Add Button */}
-        <button
-          onClick={() => onAddToCart(product)}
-          className="absolute bottom-3 right-3 bg-white text-green-600 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 hover:bg-green-600 hover:text-white transition-all duration-300 transform translate-y-2 group-hover:translate-y-0"
-        >
-          <Plus className="h-5 w-5" />
-        </button>
       </div>
 
       {/* Product Info */}
@@ -93,7 +121,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
           </div>
           
           <button
-            onClick={() => onAddToCart(product)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart(product);
+            }}
             disabled={!product.inStock}
             className="bg-green-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 active:scale-95"
           >
