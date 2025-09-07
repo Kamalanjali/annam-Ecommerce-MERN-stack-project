@@ -1,9 +1,11 @@
 import React from 'react';
-import { ShoppingCart, Leaf, Search, Menu, X, LogIn } from 'lucide-react';
+import { ShoppingCart, Leaf, Search, Menu, X, LogIn, User, Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useDarkMode } from '../hooks/useDarkMode';
 import { UserMenu } from './UserMenu';
 import { AuthModal } from './AuthModal';
+import { UserProfile } from './UserProfile';
 
 interface HeaderProps {
   cartItemsCount: number;
@@ -16,7 +18,9 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
   const [searchQuery, setSearchQuery] = useState('');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [showProfile, setShowProfile] = useState(false);
   const { user } = useAuth();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,6 +68,28 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
 
           {/* Cart and Mobile Menu */}
           <div className="flex items-center space-x-4">
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200"
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {isDarkMode ? (
+                <Sun className="h-6 w-6" />
+              ) : (
+                <Moon className="h-6 w-6" />
+              )}
+            </button>
+
+            {/* Profile Icon - Always Visible */}
+            <button
+              onClick={() => user ? null : setShowProfile(true)}
+              className="p-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200"
+              title="Profile"
+            >
+              <User className="h-6 w-6" />
+            </button>
+
             {/* Auth Buttons / User Menu */}
             {user ? (
               <UserMenu />
@@ -145,6 +171,14 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
       />
+
+      {/* Profile Modal for Non-Authenticated Users */}
+      {!user && (
+        <UserProfile 
+          isOpen={showProfile}
+          onClose={() => setShowProfile(false)}
+        />
+      )}
     </>
   );
 };

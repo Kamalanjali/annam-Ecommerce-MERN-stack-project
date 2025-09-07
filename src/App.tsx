@@ -14,7 +14,7 @@ import { ProductCategory } from './types';
 
 function App() {
   const { loading } = useAuth();
-  useDarkMode(); // Initialize dark mode
+  const { isDarkMode } = useDarkMode(); // Initialize dark mode
   const {
     cartItems,
     isCartOpen,
@@ -54,7 +54,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-gray-900' : 'bg-white'}`}>
       <Header
         cartItemsCount={getTotalItems()}
         onCartClick={() => setIsCartOpen(true)}

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { X, User, Package, MapPin, Phone, Mail, Edit, Moon, Sun, LogOut } from 'lucide-react';
+import { X, User, Package, MapPin, Phone, Mail, Edit, LogOut } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { useDarkMode } from '../hooks/useDarkMode';
 
 interface UserProfileProps {
   isOpen: boolean;
@@ -10,10 +9,59 @@ interface UserProfileProps {
 
 export const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
   const { user, signOut } = useAuth();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'addresses'>('profile');
 
   if (!isOpen || !user) return null;
+  // If user is not signed in, show sign-in prompt
+  if (!user) {
+    return (
+      <div className="fixed inset-0 z-50 overflow-hidden">
+        {/* Overlay */}
+        <div 
+          className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+          onClick={onClose}
+        />
+        
+        {/* Modal */}
+        <div className="absolute inset-0 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md transform transition-all duration-300 animate-fadeInUp">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Profile</h2>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-200"
+              >
+                <X className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 text-center">
+              <div className="w-20 h-20 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <User className="h-10 w-10 text-gray-400 dark:text-gray-500" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                Sign in to view your profile
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Access your orders, addresses, and account settings by signing in.
+              </p>
+              <button
+                onClick={() => {
+                  onClose();
+                  // Trigger sign in modal - you might need to pass this as a prop
+                }}
+                className="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-all duration-200"
+              >
+                Sign In
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleSignOut = async () => {
     await signOut();
@@ -115,14 +163,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => 
                 </button>
 
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-600">
-                  <button
-                    onClick={toggleDarkMode}
-                    className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                  >
-                    {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                    <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
-                  </button>
-                  
                   <button
                     onClick={handleSignOut}
                     className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200"
