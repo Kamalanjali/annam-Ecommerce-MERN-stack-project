@@ -7,7 +7,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
   return (
-    <section className="relative bg-gradient-to-br from-green-50 via-amber-50 to-orange-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 min-h-screen flex items-center">
+    <section className="relative bg-gradient-to-br from-green-50 via-amber-50 to-orange-50 min-h-screen flex items-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
@@ -19,16 +19,16 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
                     <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
                 </div>
-                <span className="text-gray-600 dark:text-gray-400 text-sm">Trusted by 1000+ families</span>
+                <span className="text-gray-600 text-sm">Trusted by 1000+ families</span>
               </div>
               
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
+              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                 Authentic
                 <span className="text-green-600 block">Telugu Brahmin</span>
                 Home Foods
               </h1>
               
-              <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl">
+              <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
                 Experience the rich heritage of traditional Telugu cuisine with our handmade, 
                 organic foods. No artificial colors, no chemicals - just pure, authentic flavors 
                 passed down through generations.

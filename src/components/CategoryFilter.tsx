@@ -15,7 +15,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
 
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Categories</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {allCategories.map((category) => (
           <button
@@ -24,7 +24,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
             className={`p-4 rounded-xl border transition-all duration-200 text-left group hover:scale-105 ${
               selectedCategory === category.id
                 ? 'bg-green-600 text-white border-green-600 shadow-lg'
-                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-green-300 hover:bg-green-50 dark:hover:bg-green-900/20'
+                : 'bg-white text-gray-700 border-gray-200 hover:border-green-300 hover:bg-green-50'
             }`}
           >
             <p className={`font-semibold text-sm ${
