@@ -26,24 +26,24 @@ export const AboutSection: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="bg-white py-20">
+    <section id="about" className="bg-white dark:bg-gray-900 py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
                 Preserving Telugu 
                 <span className="text-green-600 block">Culinary Heritage</span>
               </h2>
               
-              <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
                 At Annam, we believe in preserving the authentic flavors of Telugu Brahmin cuisine. 
                 Our products are made using traditional methods passed down through generations, 
                 ensuring every bite connects you to our rich cultural heritage.
               </p>
               
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                 From aromatic podis to tangy pickles, each product is handcrafted with organic 
                 ingredients sourced directly from farmers. We maintain the highest standards 
                 of hygiene and quality, bringing you the pure taste of home-cooked food.
@@ -54,12 +54,12 @@ export const AboutSection: React.FC = () => {
               {features.map((feature, index) => (
                 <div 
                   key={index}
-                  className="p-6 bg-gray-50 rounded-xl hover:bg-green-50 transition-all duration-300 group animate-fadeInUp"
+                  className="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-300 group animate-fadeInUp"
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
                   <feature.icon className="h-8 w-8 text-green-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                  <h3 className="font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 text-sm">{feature.description}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm">{feature.description}</p>
                 </div>
               ))}
             </div>

@@ -11,7 +11,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => 
   const { user, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'addresses'>('profile');
 
-  if (!isOpen || !user) return null;
+  if (!isOpen) return null;
+
   // If user is not signed in, show sign-in prompt
   if (!user) {
     return (

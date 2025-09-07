@@ -44,12 +44,12 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
             </div>
           </div>
 
-          {/* Desktop Navigation */}
+        <div className="md:hidden py-4 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-gray-600 hover:text-green-600 transition-colors duration-200">Home</a>
-            <a href="#products" className="text-gray-600 hover:text-green-600 transition-colors duration-200">Products</a>
-            <a href="#about" className="text-gray-600 hover:text-green-600 transition-colors duration-200">About</a>
-            <a href="#contact" className="text-gray-600 hover:text-green-600 transition-colors duration-200">Contact</a>
+            <a href="#home" className="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200">Home</a>
+            <a href="#products" className="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200">Products</a>
+            <a href="#about" className="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200">About</a>
+            <a href="#contact" className="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200">Contact</a>
           </nav>
 
           {/* Search Bar */}
@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
             {user ? (
               <UserMenu />
             ) : (
-              <div className="hidden sm:flex items-center">
+              <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
                 <button
                   onClick={() => openAuthModal('signin')}
                   className="bg-green-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-green-700 transition-all duration-200 flex items-center space-x-1"
@@ -105,7 +105,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
               </div>
             )}
 
-            <button
+            <form onSubmit={handleSearchSubmit} className="pt-4 border-t border-gray-100 dark:border-gray-700">
               onClick={onCartClick}
               className="relative p-2 text-gray-600 hover:text-green-600 transition-colors duration-200"
             >
@@ -119,7 +119,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
 
             {/* Mobile menu button */}
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-full focus:outline-none focus:border-green-400 transition-colors duration-200"
               className="md:hidden p-2 text-gray-600 hover:text-green-600 transition-colors duration-200"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -182,3 +182,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onS
     </>
   );
 };
+    <UserProfile 
+      isOpen={showProfile}
+      onClose={() => setShowProfile(false)}
+    />
