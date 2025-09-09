@@ -52,11 +52,11 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
 
   return (
     <>
-      <section id="products" className="bg-gray-50 py-20">
+      <section id="products" className="bg-gray-50 dark:bg-gray-900 py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Products</h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Discover our carefully crafted collection of traditional Telugu foods, 
             made with love and the finest organic ingredients.
           </p>
@@ -69,12 +69,12 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
 
         {filteredProducts.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-xl text-gray-500">No products found matching your criteria.</p>
+            <p className="text-xl text-gray-500 dark:text-gray-400">No products found matching your criteria.</p>
             <button
               onClick={() => {
                 onCategoryChange('all');
               }}
-              className="mt-4 text-green-600 hover:text-green-700 font-semibold"
+              className="mt-4 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-semibold"
             >
               View all products
             </button>

@@ -7,7 +7,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
   return (
-    <section className="relative bg-gradient-to-br from-green-50 via-amber-50 to-orange-50 min-h-screen flex items-center">
+    <section className="relative bg-gradient-to-br from-green-50 via-amber-50 to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen flex items-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
@@ -19,16 +19,16 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
                     <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
                 </div>
-                <span className="text-gray-600 text-sm">Trusted by 1000+ families</span>
+                <span className="text-gray-600 dark:text-gray-400 text-sm">Trusted by 1000+ families</span>
               </div>
               
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
                 Authentic
-                <span className="text-green-600 block">Telugu Brahmin</span>
+                <span className="text-green-600 dark:text-green-400 block">Telugu Brahmin</span>
                 Home Foods
               </h1>
               
-              <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
+              <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl">
                 Experience the rich heritage of traditional Telugu cuisine with our handmade, 
                 organic foods. No artificial colors, no chemicals - just pure, authentic flavors 
                 passed down through generations.
@@ -51,24 +51,24 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
                 <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-green-600 text-xl">🌱</span>
                 </div>
-                <p className="font-semibold text-gray-900">100% Organic</p>
-                <p className="text-sm text-gray-600">No chemicals</p>
+                <p className="font-semibold text-gray-900 dark:text-white">100% Organic</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">No chemicals</p>
               </div>
               
               <div className="text-center">
                 <div className="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-amber-600 text-xl">👵</span>
                 </div>
-                <p className="font-semibold text-gray-900">Traditional</p>
-                <p className="text-sm text-gray-600">Ancient recipes</p>
+                <p className="font-semibold text-gray-900 dark:text-white">Traditional</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Ancient recipes</p>
               </div>
               
               <div className="text-center">
                 <div className="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-orange-600 text-xl">🏠</span>
                 </div>
-                <p className="font-semibold text-gray-900">Homemade</p>
-                <p className="text-sm text-gray-600">With love</p>
+                <p className="font-semibold text-gray-900 dark:text-white">Homemade</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">With love</p>
               </div>
             </div>
           </div>
@@ -83,14 +83,14 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
               />
               
               {/* Floating Cards */}
-              <div className="absolute -top-4 -left-4 bg-white p-4 rounded-2xl shadow-lg animate-bounce">
-                <p className="font-semibold text-green-600">Fresh Daily</p>
-                <p className="text-sm text-gray-600">Made with love</p>
+              <div className="absolute -top-4 -left-4 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg animate-bounce">
+                <p className="font-semibold text-green-600 dark:text-green-400">Fresh Daily</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Made with love</p>
               </div>
               
-              <div className="absolute -bottom-4 -right-4 bg-white p-4 rounded-2xl shadow-lg animate-pulse">
-                <p className="font-semibold text-orange-600">Zero Preservatives</p>
-                <p className="text-sm text-gray-600">Pure & Natural</p>
+              <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg animate-pulse">
+                <p className="font-semibold text-orange-600 dark:text-orange-400">Zero Preservatives</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Pure & Natural</p>
               </div>
             </div>
           </div>
@@ -99,8 +99,8 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
       
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-green-400 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-green-400 rounded-full mt-2 animate-pulse"></div>
+        <div className="w-6 h-10 border-2 border-green-400 dark:border-green-500 rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-green-400 dark:bg-green-500 rounded-full mt-2 animate-pulse"></div>
         </div>
       </div>
     </section>

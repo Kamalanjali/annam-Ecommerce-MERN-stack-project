@@ -87,24 +87,34 @@ export default function Header({ cartItemsCount, onCartClick, onSearch }: Header
               </button>
 
               {/* Profile Button */}
-              <button
-                onClick={handleProfileClick}
-                className="p-2 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
-                aria-label="User profile"
-              >
-                <User className="h-5 w-5" />
-              </button>
-
               {/* Auth/User Menu */}
               {user ? (
-                <UserMenu />
+                <>
+                  <button
+                    onClick={handleProfileClick}
+                    className="p-2 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                    aria-label="User profile"
+                  >
+                    <User className="h-5 w-5" />
+                  </button>
+                  <UserMenu />
+                </>
               ) : (
-                <button
-                  onClick={() => setShowAuthModal(true)}
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
-                >
-                  Sign In
-                </button>
+                <>
+                  <button
+                    onClick={handleProfileClick}
+                    className="p-2 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                    aria-label="User profile"
+                  >
+                    <User className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => setShowAuthModal(true)}
+                    className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </>
               )}
 
               {/* Cart */}
