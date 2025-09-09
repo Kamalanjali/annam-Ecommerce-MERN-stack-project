@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Search, ShoppingCart, User, Menu, X, Moon, Sun } from 'lucide-react';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useAuth } from '../hooks/useAuth';
-import AuthModal from './AuthModal';
-import UserMenu from './UserMenu';
-import UserProfile from './UserProfile';
+import { AuthModal } from './AuthModal';
+import { UserMenu } from './UserMenu';
+import { UserProfile } from './UserProfile';
 
 interface HeaderProps {
   cartItemsCount: number;
