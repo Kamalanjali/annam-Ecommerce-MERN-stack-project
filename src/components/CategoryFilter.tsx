@@ -36,7 +36,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
             }`}>
               {category.name}
             </p>
-            <p className={\`text-xs mt-1 ${
+            <p className={`text-xs mt-1 ${
               selectedCategory === category.id ? 'text-green-100 dark:text-green-200' : 'text-gray-500 dark:text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400'
             }`}>
               {category.description}
