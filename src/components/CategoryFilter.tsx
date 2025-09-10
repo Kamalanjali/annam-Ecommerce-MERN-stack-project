@@ -30,6 +30,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
             <p className={`font-semibold text-sm ${
               selectedCategory === category.id ? 'text-white' : 'text-gray-900 group-hover:text-green-700'
               selectedCategory === category.id ? 'text-white' : 'text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400'
+              selectedCategory === category.id ? 'text-white' : 'text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400'
           `}>
               {category.name}
             </p>
@@ -42,6 +43,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
 1) Coursera: Python for everybody: https://coursera.org/share/a8dc742978b80c5b52e6ab8e0b3d3b01
 2) Udemy: Java tutorial for complete beginners:  ude.my/UC-d46a749f-5e81-4e3b-aa59-7755b7582545
 3) Hackerrank: SQL (Basics): https://www.hackerrank.com/certificates/7bb4c60763ce
+            }>
             }>
               {category.description}
             </p>
